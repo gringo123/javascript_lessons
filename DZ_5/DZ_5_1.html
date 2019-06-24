@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    td.black{
+        background-color: black;
+        border: 1px solid blue;
+    }
+    
+    
+    td.figures1{
+        color: red;
+    }
+    td.figures2{
+        color:blueviolet;
+    }
+
+    </style>
+</head>
+<body>
+   <div id = "board"> </div> 
+                       
+    <script>
+    function chess(){
+        var $table = document.createElement('table');
+        var $board = document.getElementById('board');
+        var $liter =[ '','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        var $figures1 = [['Л', 'К', 'С', 'КО', 'Ф', 'С', 'К', 'Л'], ['п', 'п', 'п', 'п', 'п', 'п', 'п', 'п' ] ]
+        var $figures2 = [['Л', 'К', 'С', 'КО', 'Ф', 'С', 'К', 'Л'], ['п', 'п', 'п', 'п', 'п', 'п', 'п', 'п' ] ]
+        for (var i = 8; i >= 0; i--){
+            var $row = document.createElement('tr');
+            if(i != 0){
+                $row.textContent = i ;
+            }
+            for (var j = 0 ; j <= 8; j++){
+                var $cell = document.createElement('td');
+                if (i!= 0 & j % 2 != 0 & i % 2 === 0){
+                    $cell.classList.add('black');
+                }else if(i!= 0 & j % 2 === 0 & i % 2 != 0 & j!= 8){
+                    $cell.classList.add('black');
+                }
+
+                $row.appendChild($cell);
+                if (i === 0){
+                    $cell.textContent = $liter[j ];
+                }
+                if(i === 1 ){
+                    $cell.classList.add('figures1');
+                    $cell.textContent = $figures1[0][j];   
+                }
+                if (i === 2 ) {
+                    $cell.classList.add('figures1');
+                    
+                    $cell.textContent = $figures1[1][j];
+                }
+                if(i === 8 ){
+                    
+                    $cell.classList.add('figures2');
+                    
+                    $cell.textContent = $figures2[0][j];
+                }
+                if(i === 7 ){
+                    $cell.classList.add('figures2');
+                    $cell.textContent = $figures2[1][j];    
+                }
+            }
+            
+            $table.appendChild($row);
+        }
+        $board.appendChild($table);
+    }
+    chess()
+    </script>
+</body>
+</html>
