@@ -3,8 +3,28 @@ var $inner = document.createElement('div');
 var $template = document.getElementById('template').children[0];
 var $catalog = document.getElementById('catalog');
 window.$catalog.addEventListener('click', handleBuyClick );
+var $cart = document.getElementById('cart');  
+$cart.addEventListener('click', handleRemoveClick );
 
 
+function accordion () {
+    var $acc = document.getElementsByClassName('accordion');
+    
+    
+    for (var i = 0; i < $acc.length; i++) {
+      $acc[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight){
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+      });
+    }
+
+}
+accordion();
 function indexOf(item){
 
     for (var i = 0 ; i < goods.length; i ++){
@@ -14,6 +34,20 @@ function indexOf(item){
     
     }
     return -1;
+}
+
+function handleRemoveClick(event){
+    if(event.target.classList.contains('remove')){
+        
+        var idx = indexOf({id:+event.target.dataset.id});
+        if (goods[idx].quantity > 1){
+            goods[idx].quantity--;
+        }else{
+            goods.splice(idx , 1);
+        }
+        countBasketPrice(goods)
+    }
+
 }
 function handleBuyClick(event){
     event.preventDefault();
@@ -32,7 +66,7 @@ function handleBuyClick(event){
         }
     countBasketPrice(goods);
     }
-
+event.preventDefault();
 }
 var products = [
     {
@@ -92,21 +126,41 @@ buildCatalog(products);
 
 function countBasketPrice(goods){
     
+     
+    $cart.innerHTML ='';
     if (goods && goods.length > 0  ){
+        
+        var $ul = document.createElement('ul');
         var sum = 0;
         var count = 0;
         for (var i = 0 ; i < goods.length; i++){
+            var $li = document.createElement('li');
+            var $span = document.createElement('span');
+            var $remove = document.createElement('button');
+            $span.textContent = goods[i].name + '('+ goods[i].quantity + ')';
+            $remove.textContent ='x';
+            $remove.dataset.id = goods[i].id;
+            $remove.classList.add('remove');
+            $li.appendChild($span);
+            $li.appendChild($remove);
+            $ul.appendChild($li);
             sum += goods[i].price * goods[i].quantity;
             count += goods[i].quantity; 
         }
-        if (sum === 0){
-            $inner.textContent ='Ваша корзина пуста'
-            return $inner;
-        }else {
-            $inner.textContent='в корзине '+ count + ' товаров на сумму '+ sum;
-            return $inner;
-        }
-    } 
+        var $total = document.createElement('div');
+        
+        $total.textContent='в корзине '+ count + ' товаров на сумму '+ sum;
+        
+        
+        $cart.appendChild($ul);
+        $cart.appendChild($total);
+            
+        
+            
+        }else{
+            $cart.textContent ='Ваша корзина пуста';
+        
+    }
     
 }
 
